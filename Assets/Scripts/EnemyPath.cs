@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemiesPath : MonoBehaviour
+public class EnemyPath : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private Transform[] _points;
-    private int _currentPoint = 0;
-    private SpriteRenderer spriteR;
 
-    void Start()
+    private int _currentPoint = 0;
+    private SpriteRenderer _spriteRenderer;
+
+    private void Start()
     {
-        spriteR = GetComponent<SpriteRenderer>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
-    void Update()
+    private void Update()
     {
         Transform target = _points[_currentPoint];
         transform.position = Vector3.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
         if (transform.position == target.position)
         {
             _currentPoint = _currentPoint == 0 ? 1 : 0;
-            spriteR.flipX = _currentPoint == 0 ? false : true;
+            _spriteRenderer.flipX = _currentPoint == 0 ? false : true;
         }
     }
 }

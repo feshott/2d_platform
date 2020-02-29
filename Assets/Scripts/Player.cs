@@ -5,31 +5,28 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    private SpriteRenderer spriteR;
-    private Rigidbody2D rb;
+
+    private SpriteRenderer _spriteRenderer;
+    private Rigidbody2D _rigidbody;
     private Animator _animator;
 
-    void Start()
+    private void Start()
     {
         _animator = GetComponent<Animator>();
-        spriteR = GetComponent<SpriteRenderer>();
-        rb = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _rigidbody = GetComponent<Rigidbody2D>();
     }
-    void Update()
+    private void Update()
     {
 
         if (Input.GetKey(KeyCode.D))
         {
-            transform.Translate(_speed * Time.deltaTime, 0, 0);
-            spriteR.flipX = false;
-            _animator.SetTrigger("isRun");
+            setDirection(false);
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Translate(_speed * Time.deltaTime * -1, 0, 0);
-            spriteR.flipX = true;
-            _animator.SetTrigger("isRun");
+            setDirection(true);
         }
 
         if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
@@ -37,9 +34,18 @@ public class Player : MonoBehaviour
             _animator.ResetTrigger("isRun");
         }
 
-        if (Input.GetKey(KeyCode.Space) && rb.velocity.y == 0)
+        if (Input.GetKey(KeyCode.Space) && _rigidbody.velocity.y == 0)
         {
-            rb.velocity = new Vector3(0, 7, 0);
+            _rigidbody.velocity = new Vector3(0, 7, 0);
         }
+    }
+
+    private void setDirection(bool direction)
+    {
+        var _speedDirection = direction ? -1 : 1;
+
+        transform.Translate(_speed * Time.deltaTime * _speedDirection, 0, 0);
+        _spriteRenderer.flipX = direction;
+        _animator.SetTrigger("isRun");
     }
 }
